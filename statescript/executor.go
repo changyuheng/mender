@@ -316,39 +316,57 @@ func reportScriptStatus(rep *client.StatusReportWrapper, statusReport string) er
 
 func (l Launcher) ExecuteAll(state, action string, ignoreError bool,
 	report *client.StatusReportWrapper) error {
+	fmt.Println("ExecuteAll 0")
 	scr, dir, err := l.get(state, action)
+	fmt.Println("ExecuteAll 1")
 	if err != nil {
+		fmt.Println("ExecuteAll 2")
 		if ignoreError {
+			fmt.Println("ExecuteAll 3")
 			log.Errorf("statescript: got an error when trying to execute [%s:%s] script, "+
 				"but ignoreError is set to true, so continuing. Full error message: %v",
 				state, action, err)
+			fmt.Println("ExecuteAll 4")
 			return nil
 		}
+		fmt.Println("ExecuteAll 5")
 		return err
 	}
 
+	fmt.Println("ExecuteAll 6")
 	execBits := os.FileMode(syscall.S_IXUSR | syscall.S_IXGRP | syscall.S_IXOTH)
 	timeout := l.getTimeout()
 
+	fmt.Println("ExecuteAll 7")
 	for _, s := range scr {
+		fmt.Println("ExecuteAll 8")
 		// check if script is executable
 		if s.Mode()&execBits == 0 {
+			fmt.Println("ExecuteAll 9")
 			if ignoreError {
+				fmt.Println("ExecuteAll 10")
 				log.Errorf("statescript: ignoring script '%s' being not executable",
 					filepath.Join(dir, s.Name()))
+				fmt.Println("ExecuteAll 11")
 				continue
 			} else {
+				fmt.Println("ExecuteAll 12")
 				return errors.Errorf("statescript: script '%s' is not executable",
 					filepath.Join(dir, s.Name()))
 			}
 		}
+		fmt.Println("ExecuteAll 13")
 
 		subStatus := fmt.Sprintf("start executing script: %s", s.Name())
 		log.Debugf(subStatus)
+		fmt.Println("ExecuteAll 14")
 		if report != nil {
+			fmt.Println("ExecuteAll 15")
 			if err = reportScriptStatus(report, subStatus); err != nil {
+				fmt.Println("ExecuteAll 16")
 				log.Errorf("statescript: can not send start status to server: %s", err.Error())
 			}
+			fmt.Println("ExecuteAll 17")
 
 			defer func() {
 				if err = reportScriptStatus(report,
@@ -358,9 +376,13 @@ func (l Launcher) ExecuteAll(state, action string, ignoreError bool,
 			}()
 		}
 
+		fmt.Println("ExecuteAll 18")
 		if err = executeScript(s, dir, l, timeout, ignoreError); err != nil {
+			fmt.Println("ExecuteAll 19")
 			return err
 		}
+		fmt.Println("ExecuteAll 20")
 	}
+	fmt.Println("ExecuteAll 21")
 	return nil
 }
