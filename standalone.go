@@ -228,36 +228,53 @@ func doStandaloneCommitStates(device *deviceManager, standaloneData *standaloneD
 
 	// ArtifactCommit state
 	err := stateExec.ExecuteAll("ArtifactCommit", "Enter", false, nil)
+	fmt.Println("Committing Artifact 1")
 	if err != nil {
+		fmt.Println("Committing Artifact 2")
 		log.Errorf("ArtifactCommit_Enter script failed: %s", err.Error())
 		callErrorScript("ArtifactCommit", stateExec)
 		doStandaloneFailureStates(device, standaloneData, stateExec, true, true, true)
+		fmt.Println("Committing Artifact 3")
 		return err
 	}
+	fmt.Println("Committing Artifact 4")
 	for _, inst := range standaloneData.installers {
+		fmt.Println("Committing Artifact 5")
 		err = inst.CommitUpdate()
+		fmt.Println("Committing Artifact 6")
 		if err != nil {
+			fmt.Println("Committing Artifact 7")
 			log.Errorf("Commit failed: %s", err.Error())
 			callErrorScript("ArtifactCommit", stateExec)
 			doStandaloneFailureStates(device, standaloneData, stateExec, true, true, true)
+			fmt.Println("Committing Artifact 8")
 			return err
 		}
+		fmt.Println("Committing Artifact 9")
 	}
 	var errorToReturn error
+	fmt.Println("Committing Artifact 10")
 	err = stateExec.ExecuteAll("ArtifactCommit", "Leave", false, nil)
+	fmt.Println("Committing Artifact 11")
 	if err != nil {
+		fmt.Println("Committing Artifact 12")
 		log.Errorf("ArtifactCommit_Leave script failed: %s", err.Error())
 		callErrorScript("ArtifactCommit", stateExec)
 		errorToReturn = err
 		standaloneData.artifactName += brokenArtifactSuffix
+		fmt.Println("Committing Artifact 13")
 		// Too late to roll back now. Continue.
 	}
+	fmt.Println("Committing Artifact 14")
 
 	err = doStandaloneCleanup(device, standaloneData, stateExec)
+	fmt.Println("Committing Artifact 15")
 	if errorToReturn == nil {
+		fmt.Println("Committing Artifact 16")
 		errorToReturn = err
 	}
 
+	fmt.Println("Committing Artifact 17")
 	return errorToReturn
 }
 
