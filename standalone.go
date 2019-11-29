@@ -226,6 +226,7 @@ func doStandaloneCommitStates(device *deviceManager, standaloneData *standaloneD
 
 	fmt.Println("Committing Artifact...")
 
+	fmt.Println("Committing Artifact 0")
 	// ArtifactCommit state
 	err := stateExec.ExecuteAll("ArtifactCommit", "Enter", false, nil)
 	fmt.Println("Committing Artifact 1")
